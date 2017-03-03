@@ -45,7 +45,7 @@ export default class Parameters extends Component {
             setParameterName, setParameterValue, setParameterDefaultValue, removeParameter
         } = this.props;
         return (
-            <div className="flex flex-row align-end">
+            <div className="flex flex-row align-end flex-wrap">
                 { parameters.map(parameter =>
                     <ParameterWidget
                         key={parameter.id}
