@@ -11,6 +11,7 @@ import DateMonthYearWidget from "./widgets/DateMonthYearWidget.jsx";
 import DateQuarterYearWidget from "./widgets/DateQuarterYearWidget.jsx";
 import CategoryWidget from "./widgets/CategoryWidget.jsx";
 import TextWidget from "./widgets/TextWidget.jsx";
+import SearchTextWidget from "./widgets/SearchTextWidget.jsx";
 
 import S from "../../containers/ParameterWidget.css";
 
@@ -36,6 +37,7 @@ export default class ParameterValueWidget extends Component {
         isEditing: PropTypes.bool,
         noReset: PropTypes.bool,
         commitImmediately: PropTypes.bool,
+        fieldId: PropTypes.number,
         focusChanged: PropTypes.func,
         isFullscreen: PropTypes.bool,
         className: PropTypes.string
@@ -49,11 +51,13 @@ export default class ParameterValueWidget extends Component {
         className: ""
     };
 
-    static getWidget(parameter, values) {
+    static getWidget(parameter, values, fieldId) {
         if (values && values.length > 0) {
             return CategoryWidget;
         } else if (WIDGETS[parameter.type]) {
             return WIDGETS[parameter.type];
+        } else if (fieldId != null) {
+            return SearchTextWidget;
         } else {
             return TextWidget;
         }
@@ -69,12 +73,12 @@ export default class ParameterValueWidget extends Component {
     state = { isFocused: false };
 
     render() {
-        const {parameter, value, values, setValue, isEditing, placeholder, isFullscreen,
+        const {parameter, value, values, fieldId, setValue, isEditing, placeholder, isFullscreen,
                noReset, commitImmediately, className, focusChanged: parentFocusChanged} = this.props;
 
         let hasValue = value != null;
 
-        let Widget = ParameterValueWidget.getWidget(parameter, values);
+        let Widget = ParameterValueWidget.getWidget(parameter, values, fieldId);
 
         const focusChanged = (isFocused) => {
             if (parentFocusChanged) {
@@ -114,7 +118,7 @@ export default class ParameterValueWidget extends Component {
             return (
                 <div className={cx(S.parameter, S.noPopover, className, { [S.selected]: hasValue, [S.isEditing]: isEditing})}>
                     { getParameterTypeIcon() }
-                    <Widget placeholder={placeholder} value={value} values={values} setValue={setValue}
+                    <Widget placeholder={placeholder} value={value} values={values} setValue={setValue} fieldId={fieldId} 
                             isEditing={isEditing} commitImmediately={commitImmediately} focusChanged={focusChanged}/>
                     { getWidgetStatusIcon() }
                 </div>
@@ -128,17 +132,16 @@ export default class ParameterValueWidget extends Component {
                     triggerElement={
                     <div ref="trigger" className={cx(S.parameter, className, { [S.selected]: hasValue })}>
                         { getParameterTypeIcon() }
-                        <div className="mr1 text-nowrap">{ hasValue ? Widget.format(value) : placeholderText }</div>
+                        <div className="mr1 text-nowrap">{ hasValue ? Widget.format(value, fieldId) : placeholderText }</div>
                         { getWidgetStatusIcon() }
                     </div>
                 }
                     target={() => this.refs.trigger} // not sure why this is necessary
                 >
-                    <Widget value={value} values={values} setValue={setValue}
+                    <Widget value={value} values={values} setValue={setValue} fieldId={fieldId}
                             onClose={() => this.refs.valuePopover.close()}/>
                 </PopoverWithTrigger>
             );
         }
     }
-
 }
