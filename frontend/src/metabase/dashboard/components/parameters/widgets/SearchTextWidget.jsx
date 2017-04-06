@@ -33,6 +33,7 @@ type Props = {
 
     fieldId: FieldId,
     metadata: Metadata,
+    placeholder: any,
 };
 
 type State = {
@@ -182,6 +183,7 @@ export default class SearchTextWidget extends Component<*, Props, State> {
     render() {
         const { setValue, isEditing } = this.props;
         const { suggestions, value } = this.state;
+        const defaultPlaceholder = this.state.isFocused ? "" : (this.props.placeholder || "Enter a value...");
 
         if (!this.state.focused && this.props.value) {
             return (
@@ -208,7 +210,7 @@ export default class SearchTextWidget extends Component<*, Props, State> {
                     onFocus={() => this.setState({ focused: true })}
                     onBlur={() => this.setState({ focused: false })}
                     autoFocus={this.state.focused}
-                    placeholder={isEditing ? "Enter a default value..." : "Enter a value..."}
+                    placeholder={isEditing ? "Enter a default value..." : defaultPlaceholder}
                 />
                 <TypeaheadPopover
                     value={value}

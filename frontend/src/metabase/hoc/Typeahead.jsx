@@ -16,13 +16,13 @@ const DEFAULT_FILTER_OPTIONS = (value, option) => {
 
 const DEFAULT_OPTION_IS_EQUAL = (a, b) => a === b
 
-export default ({ optionFilter = DEFAULT_FILTER_OPTIONS, optionIsEqual = DEFAULT_OPTION_IS_EQUAL }) => (ComposedComponent) => class extends Component {
+export default ({ optionFilter = DEFAULT_FILTER_OPTIONS, optionIsEqual = DEFAULT_OPTION_IS_EQUAL , showAllOnUnfiltered = false}) => (ComposedComponent) => class extends Component {
     static displayName = "Typeahead["+(ComposedComponent.displayName || ComposedComponent.name)+"]";
 
     constructor(props, context) {
         super(props, context);
         this.state = {
-            suggestions: [],
+            suggestions: showAllOnUnfiltered ? this.filterValues(props.options, props.value, showAllOnUnfiltered) : [],
             selectedSuggestion: null
         };
     }
@@ -55,8 +55,17 @@ export default ({ optionFilter = DEFAULT_FILTER_OPTIONS, optionIsEqual = DEFAULT
         }
     }
 
+    filterValues = (options, filterValue, showAllOnUnfiltered) => {
+        if (!filterValue) {
+            return showAllOnUnfiltered ? options : [];
+        } else {
+            return options.filter(optionFilter.bind(null, filterValue));
+        }
+    }
+
     componentWillReceiveProps({ options, value }) {
-        let filtered = value ? options.filter(optionFilter.bind(null, value)) : [];
+        let filtered = this.filterValues(options, value, showAllOnUnfiltered);
+
         this.setState({
             suggestions: filtered,
             isOpen: filtered.length > 0

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from "react";
 
 import Icon from "metabase/components/Icon.jsx";
+import LoadingSpinner from "metabase/components/LoadingSpinner";
 
 
 export default class ListSearchField extends Component {
@@ -9,7 +10,8 @@ export default class ListSearchField extends Component {
         onChange: PropTypes.func.isRequired,
         placeholder: PropTypes.string,
         searchText: PropTypes.string,
-        autoFocus: PropTypes.bool
+        autoFocus: PropTypes.bool,
+        inProgress: PropTypes.bool
     };
 
     static defaultProps = {
@@ -17,17 +19,23 @@ export default class ListSearchField extends Component {
         inputClassName: "p1 h4 input--borderless text-default flex-full",
         placeholder: "Find...",
         searchText: "",
-        autoFocus: false
+        autoFocus: false,
+        inProgress: false
     };
 
     render() {
-        const { className, inputClassName, onChange, placeholder, searchText, autoFocus } = this.props;
+        const { className, inputClassName, onChange, placeholder, searchText, autoFocus, inProgress } = this.props;
 
         return (
             <div className={className}>
-                <span className="px1">
+                <span className="px1">                    
+                  {inProgress ? (
+                    <LoadingSpinner size={16}/>
+                  ) : (
                     <Icon name="search" size={16}/>
+                  )}
                 </span>
+
                 <input
                     className={inputClassName}
                     type="text"

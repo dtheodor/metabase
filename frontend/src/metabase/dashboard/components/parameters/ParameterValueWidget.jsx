@@ -9,7 +9,8 @@ import DateRangeWidget from "./widgets/DateRangeWidget.jsx";
 import DateRelativeWidget from "./widgets/DateRelativeWidget.jsx";
 import DateMonthYearWidget from "./widgets/DateMonthYearWidget.jsx";
 import DateQuarterYearWidget from "./widgets/DateQuarterYearWidget.jsx";
-import CategoryWidget from "./widgets/CategoryWidget.jsx";
+//import CategoryWidget from "./widgets/CategoryWidget.jsx";
+import CategoryWidget from "./widgets/CategoryWidget2.jsx";
 import TextWidget from "./widgets/TextWidget.jsx";
 import SearchTextWidget from "./widgets/SearchTextWidget.jsx";
 
@@ -57,10 +58,9 @@ export default class ParameterValueWidget extends Component {
         } else if (WIDGETS[parameter.type]) {
             return WIDGETS[parameter.type];
         } else if (fieldId != null) {
-            return SearchTextWidget;
-        } else {
-            return TextWidget;
+            return CategoryWidget;
         }
+        return TextWidget;
     }
 
     static getParameterIconName(parameterType) {
@@ -75,7 +75,6 @@ export default class ParameterValueWidget extends Component {
     render() {
         const {parameter, value, values, fieldId, setValue, isEditing, placeholder, isFullscreen,
                noReset, commitImmediately, className, focusChanged: parentFocusChanged} = this.props;
-
         let hasValue = value != null;
 
         let Widget = ParameterValueWidget.getWidget(parameter, values, fieldId);
