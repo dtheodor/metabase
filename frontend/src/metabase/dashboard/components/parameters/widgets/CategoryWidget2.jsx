@@ -22,7 +22,7 @@ import Metadata from "metabase/meta/metadata/Metadata";
 import ListSearchField from "metabase/components/ListSearchField.jsx";
 
 
-const MAX_SEARCH_RESULTS = 100;
+const MAX_SEARCH_RESULTS = 300;
 
 type Props = {
     value: any,
