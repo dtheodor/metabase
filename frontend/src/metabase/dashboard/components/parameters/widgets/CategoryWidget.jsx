@@ -83,7 +83,7 @@ export default class CategoryWidget extends Component<*, Props, State> {
                       />
                   </div>
                 }
-                <ul className="scroll-y scroll-show" style={{ maxHeight: 300 }}>
+                <ul className="scroll-y scroll-show" style={{ maxHeight: 100 }}>
                     {filteredValues.map(value =>
                         <li
                             key={value}
